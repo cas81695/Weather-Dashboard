@@ -11,7 +11,33 @@
         <link rel="stylesheet" href="style.css" />
     </head>
     <body>
-        
+        <nav class="navbar navbar-dark bg-dark">
+                <a class="navbar-title">Weather Dashboard</a>        
+        </nav>
+
+        <div class="container-fluid">
+            <div class="row mt-3">
+                <div class="col-md-3 searcharea">
+                    <h1 class="text-secondary">Search City</h1>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" id="cityinput" type="search" aria-label="Search">
+                                <div class="input-group-append">
+                                    <button class="btn btn-primary" id="citybutton" type="submit">
+                                        <i class="material-icons">Search</i>
+                                    </button>
+                                </div>
+                            </div>
+                        <div class="mt-5" id="previousSearches">
+                        </div>
+                    </div>
+                        <div class="col-md-9">
+                            <div class="container" id="currentforecast"></div>
+                        </div>
+                    </div>
+                </div>
+
+
+        </div>
 
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
