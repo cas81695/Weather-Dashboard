@@ -7,7 +7,7 @@ function start () {
     var prevSearch;
     if (previousCities) {
         currentLocation = previousCities[previousCities.length - 1];
-        previousCities();
+        displayPrev();
         getCurrent(currentCity);
 
     } else {
@@ -20,15 +20,15 @@ function start () {
 }
 
 function success(position) {
-    var lati = position.coords.latitude;
-    var long = position.coords.longitude;
-    var queryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lati + "&lon=" + long + "58a9d778bd5467bd3682a77cfec43944";
+    var lat = position.coords.latitude;
+    var lon = position.coords.longitude;
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?lat=" + lat + "&lon=" + lon + "&APPID=58a9d778bd5467bd3682a77cfec43944";
     $.ajax({
         url: queryURL,
         method: "GET"
     }).then(function(response) {
         currentCity = response.name;
-        saveLoc = response.name;
+        saveCity = response.name;
         getCurrent(currentCity);
     });
 
@@ -42,22 +42,22 @@ function error(){
 
 function displayPrev() {
     if (previousCities) {
-        $("#previousSearches").empty();
+        $("#previouscities").empty();
         var buttons = $("<div>").attr("class", "list-group");
         for (var i = 0; i < previousCities.length; i++) {
-            var cityButton = $("<a>").attr("href", "#").attr("id", "city-button").text(previousCities[i]);
+            var cityButton = $("<a>").attr("href", "#").attr("id", "citybutton").text(previousCities[i]);
             if (previousCities[i] == currentCity){
                 cityButton.attr("class", "list-group-item list-group-item-action active");
 
             } else {
                 cityButton.attr("class", "list-group-item list-group-item-action");
             } buttons.prepend(cityButton);
-        } $("#previousSearches").append(buttons);
+        } $("#previouscities").append(buttons);
     }
 }
 
 function getCurrent(city) {
-    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "58a9d778bd5467bd3682a77cfec43944";
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=58a9d778bd5467bd3682a77cfec43944&units=imperial";
     $.ajax({
         url: queryURL,
         method: "GET",
@@ -99,7 +99,7 @@ function getCurrent(city) {
         cardBody.append($("<p>").attr("class", "card-text").text("Wind Speed: " + response.wind.speed + " MPH"));
 
       
-        var uvURL = "https://api.openweathermap.org/data/2.5/uvi?appid=58a9d778bd5467bd3682a77cfec43944=" + response.coord.lati + "&long=" + response.coord.lati;
+        var uvURL = "https://api.openweathermap.org/data/2.5/uvi?appid=58a9d778bd5467bd3682a77cfec43944=" + response.coord.lat + "&lon=" + response.coord.lat;
         $.ajax({
             url: uvURL,
             method: "GET"
@@ -179,22 +179,22 @@ function saveCity (city){
 }
 
 
-$("#searchbutton").on("click", function () {
+$("#citybutton").on("click", function () {
    
     event.preventDefault();
    
-    var city = $("#searchinput").val().trim();
+    var city = $("#cityinput").val().trim();
   
     if (city !== "") {
         clear();
         currentCity = city;
         saveCity(city);
-        $("#searchinput").val("");
+        $("#cityinput").val("");
         getCurrent(city);
     }
 });
 
-$(document).on("click", "#loc-btn", function () {
+$(document).on("click", "#citybutton", function () {
     clear();
     currentCity = $(this).text();
     displayPrev();
