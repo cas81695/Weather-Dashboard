@@ -162,3 +162,43 @@ function cityForecast(city) {
     });
 }
 
+function clear() {
+    $("#currentforecast").empty();
+}
+function saveCity (city){
+    //add this to the saved locations array
+    if (previousCities === null) {
+        previousCities = [city];
+    }
+    else if (previousCities.indexOf(city) === -1) {
+        previousCities.push(city);
+    }
+    //save the new array to localstorage
+    localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
+    displayPrev();
+}
+
+
+$("#searchbutton").on("click", function () {
+   
+    event.preventDefault();
+   
+    var city = $("#searchinput").val().trim();
+  
+    if (city !== "") {
+        clear();
+        currentCity = city;
+        saveCity(city);
+        $("#searchinput").val("");
+        getCurrent(city);
+    }
+});
+
+$(document).on("click", "#loc-btn", function () {
+    clear();
+    currentCity = $(this).text();
+    displayPrev();
+    getCurrent(currentCity);
+});
+
+start();
