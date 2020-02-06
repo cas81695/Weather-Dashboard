@@ -6,7 +6,7 @@ function start () {
     previousCities = JSON.parse(localStorage.getItem("citiesforecast"));
     var prevSearch;
     if (previousCities) {
-        currentLocation = previousCities[previousCities.length - 1];
+        currentCity = previousCities[previousCities.length - 1];
         displayPrev();
         getCurrent(currentCity);
 
@@ -90,6 +90,7 @@ function getCurrent(city) {
         cardBody.append($("<h3>").attr("class", "card-title").text(response.name));
     
         var currentDate = moment(response.dt, "X").format("dddd, MMMM Do YYYY, h:mm a");
+
         cardBody.append($("<p>").attr("class", "card-text").append($("<small>").attr("class", "text-muted").text("Last updated: " + currentDate)));
       
         cardBody.append($("<p>").attr("class", "card-text").html("Temperature: " + response.main.temp + " &#8457;"));
@@ -155,7 +156,7 @@ function cityForecast(city) {
                 var bodyDiv = $("<div>").attr("class", "card-body");
                 newCard.append(bodyDiv);
 
-                bodyDiv.append($("<p>").attr("class", "card-text").html("Temp: " + response.list[i].main.temp + " &#8457;"));
+                bodyDiv.append($("<p>").attr("class", "card-text").html("Temperature: " + response.list[i].main.temp + " &#8457;"));
                 bodyDiv.append($("<p>").attr("class", "card-text").text("Humidity: " + response.list[i].main.humidity + "%"));
             }
         }
@@ -165,21 +166,22 @@ function cityForecast(city) {
 function clear() {
     $("#currentforecast").empty();
 }
+
 function saveCity (city){
-    //add this to the saved locations array
+ 
     if (previousCities === null) {
         previousCities = [city];
     }
     else if (previousCities.indexOf(city) === -1) {
         previousCities.push(city);
     }
-    //save the new array to localstorage
+
     localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
     displayPrev();
 }
 
 
-$("#citybutton").on("click", function () {
+    $("#citybtn").on("click", function () {
    
     event.preventDefault();
    
@@ -194,7 +196,7 @@ $("#citybutton").on("click", function () {
     }
 });
 
-$(document).on("click", "#citybutton", function () {
+$(document).on("click", "#city-button", function () {
     clear();
     currentCity = $(this).text();
     displayPrev();
