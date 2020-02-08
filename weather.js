@@ -167,7 +167,7 @@ function clear() {
     $("#currentforecast").empty();
 }
 
-function saveCity (city){
+function saveCity(city){
  
     if (previousCities === null) {
         previousCities = [city];
@@ -178,21 +178,21 @@ function saveCity (city){
 
     localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
     displayPrev();
-}
+    }
 
 
     $("#citybtn").on("click", function () {
    
-    event.preventDefault();
+        event.preventDefault();
    
-    var city = $("#cityinput").val().trim();
+        var city = $("#cityinput").val().trim();
   
-    if (city !== "") {
-        clear();
-        currentCity = city;
-        saveCity(city);
-        $("#cityinput").val("");
-        getCurrent(city);
+        if (city !== "") {
+            clear();
+            currentCity = city;
+            saveCity(city);
+            $("#cityinput").val("");
+            getCurrent(city);
     }
 });
 
