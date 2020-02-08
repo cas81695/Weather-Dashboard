@@ -169,14 +169,13 @@ function clear() {
 }
 
 function saveLocation(city){
- 
+    //add this to the saved locations array
     if (previousCities === null) {
         previousCities = [city];
     }
     else if (previousCities.indexOf(city) === -1) {
         previousCities.push(city);
     }
-
     localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
     displayPrev();
 }
