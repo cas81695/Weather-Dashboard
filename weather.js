@@ -1,6 +1,3 @@
-var previousCities = [];
-
-var currentCity;
 
 function start () {
     previousCities = JSON.parse(localStorage.getItem("citiesforecast"));
@@ -18,6 +15,10 @@ function start () {
         }
     }
 }
+
+var previousCities = [];
+
+var currentCity;
 
 function success(position) {
     var lat = position.coords.latitude;
@@ -181,20 +182,17 @@ function saveCity(city){
     }
 
 
-    $("#citybtn").on("click", function () {
-   
+    $("#submitbtn").on("click", function () {
         event.preventDefault();
-   
-        var city = $("#cityinput").val().trim();
-  
-        if (city !== "") {
+        var loc = $("#cityinput").val().trim();
+        if (loc !== "") {
             clear();
-            currentCity = city;
-            saveCity(city);
+            currentLoc = loc;
+            saveCity(loc);
             $("#cityinput").val("");
-            getCurrent(city);
-    }
-});
+            getCurrent(loc);
+        }
+    });
 
 $(document).on("click", "#city-button", function () {
     clear();

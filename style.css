@@ -3,9 +3,23 @@
     padding: 20px;
 }
 
+h1 {
+    text-align: center;
+    color: white;
+    size: 20px;
+}
+
 .uvindex {
     padding: 5px;
 }
+
+.forecast {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 0px;
+}
+
 
 .one-fifth {
     box-sizing: border-box;
@@ -23,14 +37,8 @@
     margin-right: 0px;
 }
 
-.forecast {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    margin: 10px 0px;
-}
-
 #citybutton{
     padding: 6px 5px 0px 5px;
 
 }
+
