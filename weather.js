@@ -29,7 +29,7 @@ function success(position) {
         method: "GET"
     }).then(function(response) {
         currentCity = response.name;
-        saveLocation = (response.name);
+        previousCities = (response.name);
         getCurrent(currentCity);
     });
 
@@ -43,17 +43,17 @@ function error(){
 
 function displayPrev() {
     if (previousCities) {
-        $("#previouscities").empty();
+        $("#prevcities").empty();
         var buttons = $("<div>").attr("class", "list-group");
         for (var i = 0; i < previousCities.length; i++) {
-            var cityButton = $("<a>").attr("href", "#").attr("id", "citybutton").text(previousCities[i]);
+            var cityButton = $("<a>").attr("href", "#").attr("id", "city-button").text(previousCities[i]);
             if (previousCities[i] == currentCity){
                 cityButton.attr("class", "list-group-item list-group-item-action active");
 
             } else {
                 cityButton.attr("class", "list-group-item list-group-item-action");
             } buttons.prepend(cityButton);
-        } $("#previouscities").append(buttons);
+        } $("#prevcities").append(buttons);
     }
 }
 
