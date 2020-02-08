@@ -9,7 +9,7 @@ function start () {
 
     } else {
         if (!navigator.geolocation) {
-            getCurrent("Cary");
+            getCurrent("Raleigh");
         } else {
             navigator.geolocation.getCurrentPosition(success, error);
         }
@@ -29,7 +29,7 @@ function success(position) {
         method: "GET"
     }).then(function(response) {
         currentCity = response.name;
-        saveCity = response.name;
+        saveLocation = (response.name);
         getCurrent(currentCity);
     });
 
@@ -101,7 +101,7 @@ function getCurrent(city) {
         cardBody.append($("<p>").attr("class", "card-text").text("Wind Speed: " + response.wind.speed + " MPH"));
 
       
-        var uvURL = "https://api.openweathermap.org/data/2.5/uvi?appid=58a9d778bd5467bd3682a77cfec43944=" + response.coord.lat + "&lon=" + response.coord.lat;
+        var uvURL = "http://api.openweathermap.org/data/2.5/uvi?appid=58a9d778bd5467bd3682a77cfec43944&lat=" + response.coord.lat + "&lon=" + response.coord.lat;
         $.ajax({
             url: uvURL,
             method: "GET"
@@ -168,7 +168,7 @@ function clear() {
     $("#currentforecast").empty();
 }
 
-function saveCity(city){
+function saveLocation(city){
  
     if (previousCities === null) {
         previousCities = [city];
@@ -179,20 +179,20 @@ function saveCity(city){
 
     localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
     displayPrev();
-    }
+}
 
 
     $("#submitbtn").on("click", function () {
         event.preventDefault();
-        var loc = $("#cityinput").val().trim();
-        if (loc !== "") {
+        var city = $("#cityinput").val().trim();
+        if (city !== "") {
             clear();
-            currentLoc = loc;
-            saveCity(loc);
+            currentCity = city;
+            saveLocation(city);
             $("#cityinput").val("");
-            getCurrent(loc);
+            getCurrent(city);
         }
-    });
+});
 
 $(document).on("click", "#city-button", function () {
     clear();
