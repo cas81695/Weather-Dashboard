@@ -1,25 +1,28 @@
+// These are the variables that determined by the users input
+
+var previousCities = [];
+
+var currentCity;
+
+
+
 // This begins the process gathering info from open weather
 function start () {
-    previousCities = JSON.parse(localStorage.getItem("citiesforecast"));
-    var prevSearch;
-    // this displayd from previous cities that were entered
+    previousCities = JSON.parse(localStorage.getItem("cityweather"));
     if (previousCities) {
         currentCity = previousCities[previousCities.length - 1];
         displayPrev();
         getCurrent(currentCity);
-    // this asks the user thier location ans display the most revelant location, if not answered then Raliegh will be the Default
+    // this asks the user thier location and display the most revelant location, if not answered then Cary will be the Default
     } else {
         if (!navigator.geolocation) {
-            getCurrent("Raliegh");
+            getCurrent("Cary");
         } else {
             navigator.geolocation.getCurrentPosition(success, error);
         }
     }
 }
-// These are the variables that determine by the users input
-var previousCities = [];
 
-var currentCity;
 // if the location is succesfully given/located, it'll present the date based on the latitude and longitude
 function success(position) {
     var lat = position.coords.latitude;
@@ -30,14 +33,14 @@ function success(position) {
         method: "GET"
     }).then(function(response) {
         currentCity = response.name;
-        previousCities = (response.name);
+        saveCity(response.name);
         getCurrent(currentCity);
     });
 }
-// If the location is not found, then Raleigh will be given by default
+// If the location is not found, then Cary will be given by default
 
 function error(){
-    currentCity = "Raleigh"
+    currentCity = "Cary"
     getCurrent(currentCity);
 }
 
@@ -47,7 +50,7 @@ function error(){
 function displayPrev() {
     if (previousCities) {
         $("#prevCities").empty();
-        var btns = $("<div>").attr("class", "list-group");
+        var buttons = $("<div>").attr("class", "list-group");
         for (var i = 0; i < previousCities.length; i++) {
             var cityButton = $("<a>").attr("href", "#").attr("id", "city-button").text(previousCities[i]);
             if (previousCities[i] == currentCity){
@@ -57,22 +60,22 @@ function displayPrev() {
             else {
                 cityButton.attr("class", "list-group-item list-group-item-action");
             } 
-            btns.prepend(cityButton);
+            buttons.prepend(cityButton);
         } 
-        $("#prevCities").append(btns);
+        $("#prevCities").append(buttons);
     }
 }
 
 // This function pulls info from the api to provide the weather on a the current city displayed
 
 function getCurrent(city) {
-    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=58a9d778bd5467bd3682a77cfec43944&units=imperial";
+    var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=58a9d778bd5467bd3682a77cfec43944&units=imperial";
     $.ajax({
         url: queryURL,
         method: "GET",
-        error: function () {
+        error: function (){
             previousCities.splice(previousCities.indexOf(city), 1);
-            localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
+            localStorage.setItem("cityweather", JSON.stringify(previousCities));
             start();
         }
     }).then(function (response) {
@@ -188,7 +191,7 @@ function clear() {
 
 // Allows for the previous cities enter to be saved an displayed for future use
 
-function saveLocation(loc){
+function saveCity(loc){
 
     if (previousCities === null) {
         previousCities = [loc];
@@ -196,7 +199,7 @@ function saveLocation(loc){
     else if (previousCities.indexOf(loc) === -1) {
        previousCities.push(loc);
     }
-    localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
+    localStorage.setItem("cityweather", JSON.stringify(previousCities));
     displayPrev();
 }
 
@@ -207,7 +210,7 @@ function saveLocation(loc){
         if (loc !== "") {
             clear();
             currentCity = loc;
-            saveLocation(loc);
+            saveCity(loc);
             $("#cityinput").val("");
             getCurrent(currentCity);
         }
