@@ -1,25 +1,26 @@
-
+// This begins the process gathering info from open weather
 function start () {
     previousCities = JSON.parse(localStorage.getItem("citiesforecast"));
     var prevSearch;
+    // this displayd from previous cities that were entered
     if (previousCities) {
         currentCity = previousCities[previousCities.length - 1];
         displayPrev();
         getCurrent(currentCity);
-
+    // this asks the user thier location ans display the most revelant location, if not answered than Cary will be the Default
     } else {
         if (!navigator.geolocation) {
-            getCurrent("Raleigh");
+            getCurrent("Cary");
         } else {
             navigator.geolocation.getCurrentPosition(success, error);
         }
     }
 }
-
+// These are the variables that determine by the users input
 var previousCities = [];
 
 var currentCity;
-
+// if the location is succesfully given/located, it'll present the date based on the latitude and longitude
 function success(position) {
     var lat = position.coords.latitude;
     var lon = position.coords.longitude;
@@ -33,7 +34,7 @@ function success(position) {
         getCurrent(currentCity);
     });
 
-
+// If the location is not found, then Cary will be given by default
 }
 
 function error(){
@@ -41,6 +42,8 @@ function error(){
     getCurrent(currentCity);
 }
 
+// This function allows the user to view their previous inputs
+ // This is activated by the button on the main page 
 function displayPrev() {
     if (previousCities) {
         $("#prevcities").empty();
@@ -57,6 +60,8 @@ function displayPrev() {
     }
 }
 
+//This function pulls info from the api to provide the weather on a the current city displayed
+
 function getCurrent(city) {
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=58a9d778bd5467bd3682a77cfec43944&units=imperial";
     $.ajax({
@@ -69,6 +74,9 @@ function getCurrent(city) {
         }
     }).then(function (response) {
     
+        //these cards class and styles are defined with in the attributes
+        // the cards are assigned with a date, five days of the week with the info of predicted weather and image corresponding with the weather
+
         var currentCard = $("<div>").attr("class", "card bg-light");
         $("#currentforecast").append(currentCard);
 
@@ -92,6 +100,8 @@ function getCurrent(city) {
     
         var currentDate = moment(response.dt, "X").format("dddd, MMMM Do YYYY, h:mm a");
 
+        //These display the required info on the current date 
+
         cardBody.append($("<p>").attr("class", "card-text").append($("<small>").attr("class", "text-muted").text("Last updated: " + currentDate)));
       
         cardBody.append($("<p>").attr("class", "card-text").html("Temperature: " + response.main.temp + " &#8457;"));
@@ -100,6 +110,7 @@ function getCurrent(city) {
       
         cardBody.append($("<p>").attr("class", "card-text").text("Wind Speed: " + response.wind.speed + " MPH"));
 
+        // for the uv, this requires the info from api to be based on the latitute and longitude of the location, and values given displays a certain color
       
         var uvURL = "http://api.openweathermap.org/data/2.5/uvi?appid=58a9d778bd5467bd3682a77cfec43944&lat=" + response.coord.lat + "&lon=" + response.coord.lat;
         $.ajax({
@@ -130,6 +141,8 @@ function getCurrent(city) {
         cityForecast(response.id);
     });
 }
+
+// This function displays the forecast of the city given by the user 5 days ahead
 
 function cityForecast(city) {
     var queryURL = "https://api.openweathermap.org/data/2.5/forecast?id=" + city + "&APPID=58a9d778bd5467bd3682a77cfec43944&units=imperial"
@@ -164,17 +177,21 @@ function cityForecast(city) {
     });
 }
 
+// Allows the user to clear the current city for a new entry
+
 function clear() {
     $("#currentforecast").empty();
 }
 
+// Allows for the previous cities enter to be saved an displayed for future use
+
 function saveLocation(city){
-    //add this to the saved locations array
+
     if (previousCities === null) {
         previousCities = [city];
     }
     else if (previousCities.indexOf(city) === -1) {
-        previousCities.push(city);
+       previousCities.push(city);
     }
     localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
     displayPrev();
