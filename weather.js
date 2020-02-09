@@ -7,10 +7,10 @@ function start () {
         currentCity = previousCities[previousCities.length - 1];
         displayPrev();
         getCurrent(currentCity);
-    // this asks the user thier location ans display the most revelant location, if not answered than Cary will be the Default
+    // this asks the user thier location ans display the most revelant location, if not answered then Raliegh will be the Default
     } else {
         if (!navigator.geolocation) {
-            getCurrent("Cary");
+            getCurrent("Raliegh");
         } else {
             navigator.geolocation.getCurrentPosition(success, error);
         }
@@ -33,48 +33,51 @@ function success(position) {
         previousCities = (response.name);
         getCurrent(currentCity);
     });
-
-// If the location is not found, then Cary will be given by default
 }
+// If the location is not found, then Raleigh will be given by default
 
 function error(){
-    currentCity = "Cary"
+    currentCity = "Raleigh"
     getCurrent(currentCity);
 }
 
 // This function allows the user to view their previous inputs
- // This is activated by the button on the main page 
+// This is activated by the button on the main page
+
 function displayPrev() {
     if (previousCities) {
-        $("#prevcities").empty();
-        var buttons = $("<div>").attr("class", "list-group");
+        $("#prevCities").empty();
+        var btns = $("<div>").attr("class", "list-group");
         for (var i = 0; i < previousCities.length; i++) {
             var cityButton = $("<a>").attr("href", "#").attr("id", "city-button").text(previousCities[i]);
             if (previousCities[i] == currentCity){
                 cityButton.attr("class", "list-group-item list-group-item-action active");
 
-            } else {
+            } 
+            else {
                 cityButton.attr("class", "list-group-item list-group-item-action");
-            } buttons.prepend(cityButton);
-        } $("#prevcities").append(buttons);
+            } 
+            btns.prepend(cityButton);
+        } 
+        $("#prevCities").append(btns);
     }
 }
 
-//This function pulls info from the api to provide the weather on a the current city displayed
+// This function pulls info from the api to provide the weather on a the current city displayed
 
 function getCurrent(city) {
     var queryURL = "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&APPID=58a9d778bd5467bd3682a77cfec43944&units=imperial";
     $.ajax({
         url: queryURL,
         method: "GET",
-        error: function (){
+        error: function () {
             previousCities.splice(previousCities.indexOf(city), 1);
             localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
             start();
         }
     }).then(function (response) {
     
-        //these cards class and styles are defined with in the attributes
+        // these cards class and styles are defined with in the attributes
         // the cards are assigned with a date, five days of the week with the info of predicted weather and image corresponding with the weather
 
         var currentCard = $("<div>").attr("class", "card bg-light");
@@ -185,13 +188,13 @@ function clear() {
 
 // Allows for the previous cities enter to be saved an displayed for future use
 
-function saveLocation(city){
+function saveLocation(loc){
 
     if (previousCities === null) {
-        previousCities = [city];
+        previousCities = [loc];
     }
-    else if (previousCities.indexOf(city) === -1) {
-       previousCities.push(city);
+    else if (previousCities.indexOf(loc) === -1) {
+       previousCities.push(loc);
     }
     localStorage.setItem("citiesforecast", JSON.stringify(previousCities));
     displayPrev();
@@ -200,13 +203,13 @@ function saveLocation(city){
 
     $("#submitbtn").on("click", function () {
         event.preventDefault();
-        var city = $("#cityinput").val().trim();
-        if (city !== "") {
+        var loc = $("#cityinput").val().trim();
+        if (loc !== "") {
             clear();
-            currentCity = city;
-            saveLocation(city);
+            currentCity = loc;
+            saveLocation(loc);
             $("#cityinput").val("");
-            getCurrent(city);
+            getCurrent(currentCity);
         }
 });
 

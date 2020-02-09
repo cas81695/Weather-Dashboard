@@ -2,9 +2,9 @@
 
 This Application allows the user to learn of the weather via locally or search
 
-The main container will display the current city with the tempature, huminity, and uv index
+The main container will display the current city with the temperature, humidity, and uv index
 
-A five day forecast will be shown of the current city displayed which shows the tempature and huminity
+A five day forecast will be shown of the current city displayed which shows the temperature and humidity
 
 A local storage will contian previous inputs by the user
 
